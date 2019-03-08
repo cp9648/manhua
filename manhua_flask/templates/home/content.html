@@ -1,0 +1,141 @@
+{% extends "home_page.html" %}
+
+{% block content %}
+<nav class="mt20">
+    <ul class="clearfix">
+        <li><a href="/" title="π阅读首页"><i class="pticon pticon-home pticon-lg"></i> π阅读首页</a><i class="pticon pticon-angle-right icon"></i></li>
+        <li><a href="/detailed/{{ name }}">{{ name }}</a><i class="pticon pticon-angle-right icon"></i></li>
+        <li><a>{{ z }}</a></li>
+    </ul>
+</nav>
+<section class="readpage">
+    <div class="card readbox">
+        <div class="header line">
+            <h1 id="yei" name="yei">{{ name }} >>{{ z }}</h1>
+        </div>
+        <div class="body novel">
+            <div class="yd_text2" id="content">
+                {% for i in data_url %}
+                <div id="{{ i }}" style="display:none;" class="img_url_page">
+                    <img class="img_tp" src="{{ data_url[i] }}" />
+                </div>
+                {% endfor %}
+            </div>
+            <div class="operate">
+                <ul>
+                    <li>
+                        {% if san_zhan != None %}
+                            <form id="searchTbForm"method="POST">
+                                <input id="yc" name="yc" type="hidden" value="{{ san_zhan[1] }},{{ name }}" readonly/>
+                                <input id="but_url" name="but_url" type="hidden" value="{{ san_zhan[0] }}" readonly/>
+                                <a href="javascript:searchSubmit('../selenium')">
+                                    <i class="pticon pticon-chevron-left"></i> 上一章
+                                </a>
+                            </form>
+                        {% else %}
+                            <a onclick="wan_san()">
+                                <i class="pticon pticon-chevron-left"></i> 上一章
+                            </a>
+                        {% endif %}
+                    </li>
+
+                    <li>
+                        <a href="#yei" onclick="san()">
+                            <i class="pticon pticon-chevron-left"></i> 上一页
+                        </a>
+                    </li>
+
+
+                    <li><a href="/detailed/{{ name  }}"><i class="pticon pticon-list"></i> 目录</a></li>
+                    
+                    <li class="last">
+                        <a href="#yei" onclick="xia()">下一页 
+                            <i class="pticon pticon-chevron-right"></i>
+                        </a>
+                    </li>
+
+                    <li class="last">
+                        {% if xia_zhan != None %}
+                            <form id="searchTbForm_x"method="POST">
+                                <input id="yc" name="yc" type="hidden" value="{{ xia_zhan[1] }},{{ name }}" readonly/>
+                                <input id="but_url" name="but_url" type="hidden" value="{{ xia_zhan[0] }}" readonly/>
+                                <a href="javascript:searchSubmit_x('../selenium')">下一章
+                                    <i class="pticon pticon-chevron-right"></i>
+                                </a>
+                            </form>
+                        {% else %}
+                            <a onclick="wan_xia()">下一章
+                                <i class="pticon pticon-chevron-right"></i>
+                            </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+</section>
+{% endblock %}
+
+{% block scripy %}
+window.onload=function (){
+    var div = document.getElementById('0');
+    div.style.display = "inline";
+}
+y = 0
+function san() {
+    len = document.querySelectorAll("div").length
+    if (y!=0) {
+        y -= 1
+        for(var i=0;i<len;i++) {
+            if (i==y) {
+                var div = document.getElementById(i);
+                // div.setAttribute('display', 'none');
+                div.style.display = "inline";
+            }else{
+                var div = document.getElementById(i);
+                div.setAttribute('style', 'display: none');
+            }
+        };
+    }else{
+        alert('这是第一页')
+    }
+};
+function xia() {
+    len = document.querySelectorAll("div").length
+    if (y!=len-9) {
+        y += 1
+        for(var i=0;i<len;i++) {
+            if (i==y) {
+                var div = document.getElementById(i);
+                div.style.display = "inline";
+            }else{
+                var div = document.getElementById(i);
+                div.setAttribute('style', 'display: none');
+            }
+        };
+    }else {
+        alert('这是最后一页')
+    };
+};
+function wan_san() {
+    alert('这就是第一章了')
+};
+
+function wan_xia() {
+    alert('后面没有了')
+};
+
+function searchSubmit(url){
+    var dzurl =url;
+    $("#searchTbForm").attr("action",dzurl);
+    $("#searchTbForm").submit();
+};
+
+function searchSubmit_x(url){
+    var dzurl =url;
+    $("#searchTbForm_x").attr("action",dzurl);
+    $("#searchTbForm_x").submit();
+};
+
+{% endblock %}

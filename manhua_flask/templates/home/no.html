@@ -1,0 +1,24 @@
+{% extends "home_page.html" %}
+
+{% block content %}
+<div class="container clearfix mt20">
+    <div class="w-left">
+	<h1>这里什么都没有！</h1>
+    </div>
+    <div class="w-right">
+        <div class="card">
+                <div class="header line">
+                    <h3>漫画分类</h3>
+                </div>
+                <div class="body">
+                    <ul class="toplist clearfix">
+                        <li><a href="/">全部漫画</a></li>
+                        {% for i in _set %}
+                            <li><a href="/{{ i }}">{{ i }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

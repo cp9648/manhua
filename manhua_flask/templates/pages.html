@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        .img_url_page {
+            position:absolute;
+            top:60px;
+            left:20%;
+
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ name }}</h2>
+    <h3>{{ z }}</h3>
+    {% for i in data_url %}
+    <div id="{{ i }}" style="display:none;" class="img_url_page">
+        <img src="{{ data_url[i] }}" />
+    </div>
+    {% endfor %}
+    {% if san_zhan[0] != None %}
+    <form action="../selenium" method="POST">
+        <input id="yc" name="yc" type="hidden" value="{{ san_zhan[1] }},{{ name }}" readonly/>
+        <button id='but_url' name="but_url" value="{{ san_zhan[0] }}">上一章</button>
+    </form>
+    {% else %}
+        <button onclick="wan_san()">上一章</button>
+    {% endif %}
+    <button onclick="san()">上一页</button>
+    <button onclick="xia()">下一页</button>
+    {% if xia_zhan[0] != None %}
+        <form action="../selenium" method="POST">
+            <input id="yc" name="yc" type="hidden" value="{{ xia_zhan[1] }},{{ name }}" readonly/>
+            <button id='but_url' name="but_url" value="{{ xia_zhan[0] }}">下一章</button>
+        </form>
+    {% else %}
+        <button onclick="wan_xia()">下一章</button>
+    {% endif %}
+<script type="text/javascript">
+    window.onload=function (){
+        var div = document.getElementById('0');
+        div.style.display = "";
+    }
+    y = 0
+    function san() {
+        len = document.querySelectorAll("div").length
+        if (y!=0) {
+            y -= 1
+            for(var i=0;i<len;i++) {
+                if (i==y) {
+                    var div = document.getElementById(i);
+                    // div.setAttribute('display', 'none');
+                    div.style.display = "";
+                }else{
+                    var div = document.getElementById(i);
+                    div.style.display = "none";
+                }
+            };
+        };
+    };
+    function xia() {
+        len = document.querySelectorAll("div").length
+        if (y!=len-1) {
+            y += 1
+            for(var i=0;i<len;i++) {
+                if (i==y) {
+                    var div = document.getElementById(i);
+                    div.style.display = "";
+                }else{
+                    var div = document.getElementById(i);
+                    div.style.display = "none";
+                }
+            }
+        };
+    };
+    function wan_san() {
+        alert('这就是第一章了')
+    }
+
+    function wan_xia() {
+        alert('后面没有了')
+    }
+</script>
+</body>
+</html>

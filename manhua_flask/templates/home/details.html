@@ -1,0 +1,82 @@
+{% extends "home_page.html" %}
+
+{% block content %}
+<nav class="mt20">
+    <ul class="clearfix">
+        <li><a href="/" title="π阅读首页"><i class="pticon pticon-home pticon-lg"></i> π阅读首页</a><i class="pticon pticon-angle-right icon"></i></li>
+        <li><a href="/detailed/{{ data['name'] }}">{{ data['name'] }}</a></li>
+    </ul>
+</nav>
+<br />
+<div class="card">
+    <div class="header line">
+        <h1>{{ data['name'] }}</h1>
+    </div>
+    <div class="body novel">
+        <div class="novelinfo">
+            <div class="novelinfo-l">
+                <ul>
+                    <li>作者：<a href="">{{ data['author'] }}</a></li>
+                    <li>分类：<a href="l">{{ data['_type'] }}</a></li>
+                    <li>来源：起点中文</li>
+                    <!-- <li>最新：<a href="" target="_blank">最新章节</a></li> -->
+                    <li>更新：{{ data['update'] }}</li>
+                    <li class="hulvechandu">简介：<a href="#search">{{ data['title'] }}</a></li>
+                </ul>
+            </div>
+            <div class="novelinfo-r">
+                <a href=""><img class="img_tp" src="{{ data['img'] }}"></a>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<div id="search" class="card mt20">
+    <div class="header line">
+        <h1>{{ data['name'] }} 内容简介</h1>
+    </div>
+    <a>简介： {{ data['title'] }}</a>
+</div>
+<!-- -------------------------------------- -->
+<div class="card mt20">
+    <div class="header line">
+        <h2>小说名 章节目录</h2>
+    </div>
+
+    <div class="body ">
+        <ul class="dirlist clearfix">
+            <!-- 循环动态生成 -->
+            {% for i in  data['chapter'] %}
+            <li>
+                <form id="searchTbForm{{ loop.index-1 }}" method="POST">
+                    <input id="yc" name="yc" type="hidden" value="{{ loop.index-1 }},{{ data['name'] }}" readonly/>
+                    <input id="but_url" name="but_url" type="hidden" value="{{ data['chapter'][i] }}" readonly/>
+                    <a id="but_url" name="but_url" value="{{ data['chapter'][i] }}" target="_blank" href="javascript:searchSubmit('../selenium', '#searchTbForm{{ loop.index-1 }}')">{{ i }}</a>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        <a id="tiao"></a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripy %}
+$(function () {
+    $('a[href="#search"]').on('click', function(event) {
+        event.preventDefault();
+        $('#search').addClass('open');
+    });
+    $('#search, #search button.close').on('click keyup', function(event) {
+        if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
+            $(this).removeClass('open');
+        }
+    });
+});
+function searchSubmit(url, searchTbForms){
+    var dzurl =url;
+    $(searchTbForms).attr("action",dzurl);
+    $(searchTbForms).submit();
+};
+{% endblock %}

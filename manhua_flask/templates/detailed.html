@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    书名：{{ data['name'] }}<br />
+    图片：
+    <img src="{{ data['img'] }}" /><br />
+    状态：{{ data['state'] }}<br />
+    作者：{{ data['author'] }}<br />
+    类型：{{ data['_type'] }}<br />
+    更新：{{ data['update'] }}<br />
+    简介：{{ data['title'] }}<br />
+    章节：<br />
+    <div>
+    {% for i in  data['chapter'] %}
+        <form action="../selenium" method="POST">
+            <input id="yc" name="yc" type="hidden" value="{{ loop.index-1 }},{{ data['name'] }}" readonly/>
+            <button id='but_url' name="but_url" value="{{ data['chapter'][i] }}">{{ i }}</button>
+        </form>
+    {% endfor %}
+    </div>
+</body>
+</html>

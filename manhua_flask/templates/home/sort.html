@@ -1,0 +1,110 @@
+{% extends "home_page.html" %}
+
+{% block content %}
+<nav class="mt20">
+    <ul class="clearfix">
+        <li><a href="/" title="π阅读首页"><i class="pticon pticon-home pticon-lg"></i> π阅读首页</a><i class="pticon pticon-angle-right icon"></i></li>
+    </ul>
+</nav>
+<div class="container clearfix mt20">
+    <div class="w-left">
+        <div class="card">
+            <div class="header line">
+                <h2>漫画列表</h2>
+            </div>
+            <div class="body">
+                <ul class="librarylist">
+                    {% for j, i in data.iterrows() %}
+                        <li>
+                            <div class="pt-ll-l">
+                                <a href="/detailed/{{ i['name'] }}"><img src="{{ i['img'] }}"></a>
+                            </div>
+                            <div class="pt-ll-r">
+                                <p class="info">
+                                    <span>《<a href="/detailed/{{ i['name'] }}" class="novelname">{{ i['name'] }}</a>》</span>
+                                    <span><a href="" >{{ i['author'] }}</a></span>
+                                </p>
+                                <p class="intro">
+                                    {{ i['title'] }}
+                                </p>
+                                <p class="last">
+                                    最新章节：<a href="" target="_blank">{{ i['update'] }}</a>
+                                </p>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="w-right">
+        <div class="card">
+                <div class="header line">
+                    <h3>漫画分类</h3>
+                </div>
+                <div class="body">
+                    <ul class="toplist clearfix">
+                        <li><a href="/">全部漫画</a></li>
+                        {% for i in _set %}
+                            <li><a href="/{{ i }}">{{ i }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+    </div>
+</div>
+<section class="readpage" style="text-align:center;">
+        <p style="width: 70px; float: left;">
+            {% if yei[1] == '' %}
+                <a onclick="search_s('?page={{ yei[0]-1 }}', {{ yei[0] }})"><i class="pticon pticon-chevron-left"></i> 上一页</a>
+            {% else %}
+                <a onclick="search_s('/{{ yei[1] }}?page={{ yei[0]-1 }}', {{ yei[0] }})"><i class="pticon pticon-chevron-left"></i> 上一页</a>
+            {% endif %}
+        </p>
+        {% for i in range(shu) %}
+            {% if yei[0] == i+1 %}
+                <p style="width: 50px; float: left;">{{ i+1 }}</p>
+            {% endif %}
+            {% if yei[0] < i+1 and i < yei[0]+9 or i+2 == yei[0] %}
+                {% if yei[1] == '' %}
+                    <p style="width: 50px; float: left;text-align:center;"><a  href="?page={{ i+1 }}"> {{ i+1 }} </a></p>
+                {% else %}
+                    <p style="width: 50px; float: left;text-align:center;"><a  href="/{{ yei[1] }}?page={{ i+1 }}"> {{ i+1 }} </a></p>
+                {% endif %}
+            {% endif %}
+            {% if yei[0]+10 == i %}
+                <p style="width: 50px; float: left;">...</p>
+                {% if yei[1] == '' %}
+                    <p style="width: 50px; float: left;"><a href="?page={{ shu }}">{{ shu }}</a></p>
+                {% else %}
+                    <p style="width: 50px; float: left;"><a href="/{{ yei[1] }}?page={{ shu }})">{{ shu }}</a></p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <p style="width: 70px; float: left;">
+            {% if yei[1] == '' %}
+                <a onclick="search_x('?page={{ yei[0]+1 }}', {{ yei[0] }}, {{ shu }})">下一页 <i class="pticon pticon-chevron-right"></i></a>
+            {% else %}
+                <a onclick="search_x('/{{ yei[1] }}?page={{ yei[0]+1 }}', {{ yei[0] }}, {{ shu }})">下一页 <i class="pticon pticon-chevron-right"></i></a>
+            {% endif %}
+        </p>
+</section><br /><br /><br />
+{% endblock %}
+
+{% block scripy %}
+function search_x(url, t1, t2){
+    if (t1 != t2) {
+        self.location.href=url
+    }else{
+        alert('这是最后一页')
+    };
+};
+function search_s(url, t1){
+    if (t1 != 1) {
+        self.location.href=url
+    }else{
+        alert('这已经是第一页了')
+    };
+};
+{% endblock %}
